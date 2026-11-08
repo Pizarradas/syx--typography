@@ -390,12 +390,18 @@ def cincel(u, inf, conf):
                 a = ang((s[2][0] - s[1][0], s[2][1] - s[1][1])) % 180
                 if not (lmin <= L <= lmax) or min(a, 180 - a) < 0.5 or abs(a - 90) < 0.5:
                     continue
-                t_prev = math.radians(ang(tang_fin(segs[si - 1])[0]))
-                t_next = math.radians(ang(tang_ini(segs[(si + 1) % len(segs)])[0]) + 180)
+                (v_prev, l_prev), (v_next, l_next) = tang_fin(segs[si - 1]), tang_ini(segs[(si + 1) % len(segs)])
+                t_prev = math.radians(ang(v_prev))
+                t_next = math.radians(ang(v_next) + 180)
                 eje = math.degrees(math.atan2(math.sin(t_prev) + math.sin(t_next), math.cos(t_prev) + math.cos(t_next)))
                 desvio = (a - (eje + 90) % 180 + 90) % 180 - 90
                 medidos.append(round(desvio, 1))
-                if abs(desvio - angulo) > 1.0:
+                # Redondear a enteros desvía una dirección entre dos puntos hasta atan(2·REJILLA/largo):
+                # el corte por su largo, el eje por la media de los dos tiradores que lo definen.
+                def err(largo):
+                    return math.degrees(math.atan(2 * REJILLA / max(largo, 1)))
+                tol = 1.0 + err(L) + (err(l_prev) + err(l_next)) / 2
+                if abs(desvio - angulo) > tol:
                     inf.err(g.name, "C", f"corte en {tuple(round(v) for v in s[1])} a {desvio:+.1f}° de la perpendicular al trazo; la regla es +{angulo}°")
         if medidos:
             inf.medida(g.name, "cincel", medidos)
@@ -508,6 +514,20 @@ def meta():
         hit = bool(inf.errores)
         ok &= hit == debe
         print(f"  zona {y1:<5} espera {'Z' if debe else 'limpio'}: {'detectado' if hit else 'limpio'}")
+    # Cincel: asta vertical cortada a +26° pasa; a +31° (5° fuera, por encima del margen de
+    # redondeo de un corte de 111 u) debe fallar.
+    for y_der, debe in ((300 + round(100 * math.tan(math.radians(26))), False),
+                        (300 + round(100 * math.tan(math.radians(31))), True)):
+        uc, inf = ufoLib2.Font(), Informe()
+        g = uc.newGlyph("asta")
+        pen = g.getPen()
+        for i, q in enumerate([(0, 0), (100, 0), (100, y_der), (0, 300)]):
+            pen.moveTo(q) if i == 0 else pen.lineTo(q)
+        pen.closePath()
+        cincel(uc, inf, {"angulo": 26})
+        hit = bool(inf.errores)
+        ok &= hit == debe
+        print(f"  cincel {y_der:<4} espera {'C' if debe else 'limpio'}: {'detectado' if hit else 'limpio'}")
     print("AUTOPRUEBA:", "OK" if ok else "FALLA")
     return ok
 

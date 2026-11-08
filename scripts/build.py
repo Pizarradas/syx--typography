@@ -222,6 +222,8 @@ def main():
     if chk["ERROR"]:
         sys.exit("Fuentes con errores bloqueantes: se detiene la compilación.")
 
+    if not a.rapido and not (BIN / "gftools").exists():  # comprobar antes de borrar fonts/
+        sys.exit("Falta gftools para la compilación completa: ejecuta setup_env.sh (o usa --rapido).")
     inf = preparar(proj, ds, ufos)
     shutil.rmtree(proj / "fonts", ignore_errors=True)  # sin restos: las puertas solo ven lo recién compilado
     ok, log = compilar(proj, ds_path, ds, a.rapido)

@@ -85,10 +85,12 @@ anotada en `BRIEF.md`. Esa exploración es casi gratis y evita que todos los pro
 los mismos valores por defecto; la puerta de esta fase sigue siendo la compilación real.
 ```bash
 $PY ${CLAUDE_SKILL_DIR}/scripts/check_sources.py sources/Familia.designspace
+$PY ${CLAUDE_SKILL_DIR}/scripts/verificar.py sources/Familia.designspace --config verificar.json
 $PY ${CLAUDE_SKILL_DIR}/scripts/build.py PROYECTO --rapido
 $PY ${CLAUDE_SKILL_DIR}/scripts/proof.py fonts/variable/*.ttf -o proofs --pagina control palabras --texto "..."
 ```
-**Puerta:** la idea se percibe en palabras y lo aprueba la persona. Muéstrale las pruebas y pregunta. Primera auditoría de similitud.
+`verificar.py` audita lo que una prueba PNG no deja ver (zonas exactas, quiebros con tolerancia de rejilla, islas, espolones, tiradores) y, con un `verificar.json` del proyecto, las reglas del brief: astas, eje del contraste, ángulo de corte y laterales. Escribe ese archivo con las cifras del brief en cuanto existan; plantilla en `assets/verificar_ejemplo.json`.
+**Puerta:** la idea se percibe en palabras y lo aprueba la persona; `verificar.py` sin errores. Muéstrale las pruebas y pregunta. Primera auditoría de similitud.
 
 ### 2. Primer borrador
 Completa minúscula, mayúsculas, cifras y puntuación con espaciado grueso. Lee `references/03-espaciado-y-kerning.md`.
@@ -100,7 +102,7 @@ Extremos de peso y anchura, cursiva, versalitas. Los másteres van en los extrem
 ~/.local/share/type-design/venv/bin/fonttools varLib.interpolatable sources/Familia.designspace
 ```
 Detecta puntos iniciales girados y contornos invertidos, que `check_sources.py` no ve.
-**Puerta:** `check_sources.py` sin errores, `interpolatable` limpio y `proof.py --pagina pesos` sin saltos ni quiebros.
+**Puerta:** `check_sources.py` y `verificar.py` sin errores en todos los másteres, `interpolatable` limpio y `proof.py --pagina pesos` sin saltos ni quiebros.
 
 ### 4. Cobertura
 Diacríticos, conjunto de glifos e idiomas. Lee `references/06-idiomas-y-cobertura.md`. El español exige ¿ ¡ ñ ª º « » € bien dibujados, no rotados ni heredados.
@@ -153,6 +155,9 @@ Elige el origen con rigor: una petición abstracta no es una regla humana, y apr
 - La tensión (`k`, `ki`), el ángulo de corte (`corte`), el eje del contraste (`anillo_eje`), la superelipse (`superovalo`, `k_superelipse`) y los terminales (`tapa` curva, gota con `punto`, `losa`) son **estilo del proyecto**: decídelos en el brief y pásalos al constructor de `G`. No aceptes los valores por defecto del módulo sin un motivo.
 - Recoge los fallos por glifo y guarda los másteres solo al final. Un fallo a medio máster deja archivos desiguales y `check_sources.py` da decenas de errores que esconden la causa.
 - Pon los parámetros en un solo lugar y deriva de ellos asta, fino, rebasamiento y espaciado. No dupliques números por glifo.
+- Coloca cada nodo con el grosor **real** del trazo en ese punto, no con el nominal: con contraste de eje inclinado, un trazo horizontal no mide el fino (`reglas.grosor_traslacion`, `reglas.eje_en_zona`). Si no, los rebasamientos salen del doble sin que se note en la prueba.
+- Fija el avance desde la tinta real (`reglas.cerrar_desde_tinta`), no desde la caja del dibujo: curvas, cortes y uniones rara vez empiezan en x = 0.
+- Tras redondear a enteros, recupera la continuidad de los nodos lisos (`reglas.alinear_tiradores`): con tiradores cortos, el redondeo crea quiebros de 2–3°.
 - Evita la geometría pura. Compensa curvas frente a rectas, horizontales frente a verticales, uniones y mayúsculas frente a minúsculas. Un círculo perfecto se ve mal.
 - Reutiliza partes (hombro, panza, remate), pero corrige ópticamente cada glifo. El sistema da coherencia; la excepción da vida.
 - Protege lo que la persona retoque: lista de glifos congelados que el generador no sobrescribe.
@@ -167,6 +172,8 @@ Elige el origen con rigor: una petición abstracta no es una regla humana, y apr
 | `scripts/trazos.py` | Contornos directos: rectas, óvalos, componentes, anclas |
 | `scripts/motor.py` | Motor de trazos: esqueleto a contorno, cortes y tapas de terminal, anillos (también de eje inclinado), gota y losa |
 | `scripts/check_sources.py` | Compatibilidad, contornos abiertos, nodos en extremos, tensiones |
+| `scripts/verificar.py` | Auditoría matemática con tolerancias: topología, zonas exactas, quiebros, tiradores, G2 y reglas del brief (`verificar.json`); `--meta` se prueba a sí mismo |
+| `scripts/reglas.py` | Reglas de construcción: grosor de traslación, eje en zona con grosor real, avance desde la tinta, tiradores alineados en la rejilla |
 | `scripts/build.py` | Compila y ejecuta OTS, coherencia, conformación, fontc y QA |
 | `scripts/proof.py` | Pruebas PNG: control, palabras, texto, cascada, glifos, pesos, idiomas, oscuro |
 | `scripts/shape_tests.py` | Pruebas de conformación con HarfBuzz; `--comparar` frente a un WOFF2 |

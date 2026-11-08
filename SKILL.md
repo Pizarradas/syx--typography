@@ -42,6 +42,27 @@ Después fija cuatro cosas. Pregunta solo lo que no se pueda deducir del pedido.
 - **Programa:** por defecto, UFO + designspace en WSL. Fontra Pak (gratis) o FontLab 9 en Windows, Glyphs 4 en macOS. Detalles en `references/04-programas-y-toolchain.md`.
 - **Alcance realista:** el coste es glifos × másteres. Un primer proyecto sano es una Regular (o variable en peso) con letras básicas del español. Una familia profesional lleva meses: dilo antes de empezar. Si piden una serifa expresiva solo por código, avisa de que el resultado será un borrador.
 
+## Modo boceto
+
+Para explorar un concepto antes de fabricar: `scripts/sketch.py` renderiza variantes
+paramétricas a una hoja PNG sin proyecto, sin UFO y sin compilar, en menos de un segundo.
+Un archivo de boceto define `VARIANTES` (nombre → parámetros) y `glifos(ufo, p)` con las
+primitivas de `motor.py` (patrón: `assets/ejemplo_boceto.py`).
+
+```bash
+$PY ${CLAUDE_SKILL_DIR}/scripts/sketch.py boceto.py -o hoja.png --texto "noon HOHO"
+```
+
+- Úsalo cuando pidan bocetos, probar ideas o comparar direcciones. Pocas variantes por
+  hoja y deliberadamente distantes; itera los parámetros con la persona sobre la hoja.
+- Un boceto juzga **forma y color, no espaciado**: los avances son ingenuos y no hay
+  kerning ni conformación. Dilo al entregar cada hoja.
+- Nada del boceto se publica ni se exporta. El paso a fuente real es `new_project.py` con
+  **las mismas funciones de glifo** en el generador: los parámetros aprobados pasan a
+  `PARAMS`, las hipótesis a `BRIEF.md`, y ahí empieza el registro de procedencia normal.
+- El modo boceto no exime de las reglas de originalidad: bocetar una fuente ajena se
+  rechaza igual (`references/08-originalidad-licencias-ia.md`).
+
 ## Fases y puertas
 
 No avances sin superar la puerta. Las puertas evitan el fallo más caro, un concepto mal definido que se descubre al final. Este flujo es una síntesis propia de esta investigación, no un estándar publicado.
@@ -57,11 +78,11 @@ Lee `references/01-brief-y-parametros.md`. Escribe por qué debe existir, usos, 
 ### 1. Prueba de concepto
 Dibuja n, o, H, O; luego a, d, e, h, s. Lee `references/02-dibujo-y-correcciones.md`. Si dibujas por código, usa `scripts/trazos.py` y el patrón de `assets/ejemplo_generador.py`.
 
-Si el concepto no está cerrado, genera 2 o 3 **variantes de parámetros deliberadamente
+Si el concepto no está cerrado, boceta 2 o 3 **variantes de parámetros deliberadamente
 distantes** (tensión, ángulo de corte, eje del contraste, apertura, anchura: las palancas de
-`references/01`), compílalas con `--rapido` y enseña las pruebas lado a lado: la persona elige
-y la elección queda anotada en `BRIEF.md`. Con el motor paramétrico la exploración es casi
-gratis, y es lo que evita que todos los proyectos hereden los mismos valores por defecto.
+`references/01`) con el modo boceto, en una sola hoja: la persona elige y la elección queda
+anotada en `BRIEF.md`. Esa exploración es casi gratis y evita que todos los proyectos hereden
+los mismos valores por defecto; la puerta de esta fase sigue siendo la compilación real.
 ```bash
 $PY ${CLAUDE_SKILL_DIR}/scripts/check_sources.py sources/Familia.designspace
 $PY ${CLAUDE_SKILL_DIR}/scripts/build.py PROYECTO --rapido
@@ -141,6 +162,7 @@ Elige el origen con rigor: una petición abstracta no es una regla humana, y apr
 | Script | Para qué |
 |---|---|
 | `scripts/setup_env.sh` | Instala la cadena en un entorno aislado; `--qa` añade las herramientas de auditoría |
+| `scripts/sketch.py` | Hojas de boceto: variantes paramétricas a PNG sin proyecto ni compilación |
 | `scripts/new_project.py` | Crea UFO, designspace, brief y registro |
 | `scripts/trazos.py` | Contornos directos: rectas, óvalos, componentes, anclas |
 | `scripts/motor.py` | Motor de trazos: esqueleto a contorno, cortes y tapas de terminal, anillos (también de eje inclinado), gota y losa |

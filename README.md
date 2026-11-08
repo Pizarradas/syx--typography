@@ -4,26 +4,26 @@
 
 <br><br>
 
-<strong>Skill para <a href="https://code.claude.com/docs/en/skills">Claude Code</a> que diseña y produce tipografías originales de principio a fin:<br>del brief al WOFF2, con comprobaciones en cada fase y registro de la procedencia de cada glifo.</strong>
+<strong>A <a href="https://code.claude.com/docs/en/skills">Claude Code</a> skill that designs and produces original typefaces end to end:<br>from the brief to the WOFF2, with checks at every phase and per-glyph provenance records.</strong>
 
 <br><br>
 
-<img src="https://img.shields.io/badge/skill-Claude_Code-111111?style=flat-square" alt="skill Claude Code">
-<img src="https://img.shields.io/badge/fases-0%E2%86%927-a31621?style=flat-square" alt="fases 0 a 7">
-<img src="https://img.shields.io/badge/scripts-12-57534e?style=flat-square" alt="12 scripts">
-<img src="https://img.shields.io/badge/referencias-9-57534e?style=flat-square" alt="9 referencias">
-<img src="https://img.shields.io/badge/UFO%20+%20designspace-fontmake-2b6cb0?style=flat-square" alt="UFO + designspace con fontmake">
-<img src="https://img.shields.io/badge/web-WOFF2-5b8c5a?style=flat-square" alt="exporta WOFF2">
-<img src="https://img.shields.io/badge/licencia-MIT-8c8678?style=flat-square" alt="licencia MIT">
+<img src="https://img.shields.io/badge/skill-Claude_Code-111111?style=flat-square" alt="Claude Code skill">
+<img src="https://img.shields.io/badge/phases-0%E2%86%927-a31621?style=flat-square" alt="phases 0 to 7">
+<img src="https://img.shields.io/badge/scripts-13-57534e?style=flat-square" alt="13 scripts">
+<img src="https://img.shields.io/badge/references-9-57534e?style=flat-square" alt="9 references">
+<img src="https://img.shields.io/badge/UFO%20+%20designspace-fontmake-2b6cb0?style=flat-square" alt="UFO + designspace with fontmake">
+<img src="https://img.shields.io/badge/web-WOFF2-5b8c5a?style=flat-square" alt="exports WOFF2">
+<img src="https://img.shields.io/badge/license-MIT-8c8678?style=flat-square" alt="MIT license">
 
 <br><br>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/especimen-dark.png">
-  <img src="docs/especimen.png" alt="Espécimen de primitivas: anillos con eje de contraste a 0, 18 y 30 grados, superelipse y terminales" width="920">
+  <img src="docs/especimen.png" alt="Specimen of primitives: rings with contrast axis at 0, 18 and 30 degrees, a superellipse, and terminals" width="920">
 </picture>
 
-<em>Dibujado por el motor de la skill: eje de contraste inclinado, superelipse de Lamé y terminales<br>(tapas curvas, gota, losa). Los másteres salen compatibles por construcción.</em>
+<em>Drawn by the skill's own stroke engine: inclined contrast axis, Lamé superellipse and terminals<br>(curved caps, teardrop, slab). Masters come out interpolation-compatible by construction.</em>
 
 </div>
 
@@ -31,162 +31,178 @@
 
 ---
 
-Trabaja con UFO + designspace y compila con fontmake. Puede dibujar por código o actuar como ingeniería y control de calidad de una persona que dibuja en Fontra, FontLab o Glyphs.
+It works with UFO + designspace sources and compiles with fontmake. It can draw by code, or act as the engineering and QA partner of a person drawing in Fontra, FontLab or Glyphs. The skill's instructions and reference library are written in Spanish; use it in any language — the agent reads them natively.
 
-## ✍️ Qué puedes pedirle
+## ✍️ What you can ask for
 
 ```text
-Quiero crear una tipografía geométrica para titulares, variable en peso y lista para mi web.
-Revisa el espaciado y las métricas de la fuente de esta carpeta.
-Mi fuente sale con falsa negrita en Word y los acentos no se colocan bien. Arréglalo.
-Prepara esta fuente para la web sin perder las features.
-¿Qué programa me recomiendas para diseñar tipos en Windows?
+I want a geometric display typeface, variable in weight, ready for my website.
+Review the spacing and metrics of the font in this folder.
+My font shows faux bold in Word and accents are misplaced. Fix it.
+Prepare this font for the web without losing OpenType features.
+Which app should I use to design type on Windows?
 ```
 
-La skill se activa sola con este tipo de peticiones. No sirve para elegir fuentes existentes ni para maquetar con ellas, y no ayuda a clonar o renombrar fuentes ajenas: propone alternativas legítimas.
+The skill triggers on requests like these. It is not for picking existing fonts or laying out with them, and it will not clone or rename someone else's font: it proposes legitimate alternatives instead.
 
-## 🧭 Cómo trabaja
+## ✏️ Sketch mode
 
-Cada fase termina en una **puerta**: no se avanza hasta superarla.
+Before any project exists, the skill can explore a concept as **parametric sketch sheets**: variants rendered straight to PNG — no UFO, no designspace, no compilation — in under a second. A sketch file declares `VARIANTES` (name → parameters) and `glifos(ufo, p)` drawn with the stroke engine, so the approved sketch's glyph code and parameters transfer **as-is** into the real build. Nothing is thrown away.
 
-| Fase | Trabajo | Puerta |
+<div align="center">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/sketch-dark.png">
+  <img src="docs/sketch.png" alt="A sketch sheet: three concept directions rendered side by side for comparison" width="860">
+</picture>
+
+<em>One sheet, three deliberately distant directions. Sketches judge shape and color —<br>not spacing — and are never published: the gate to a real font is still the full build.</em>
+
+</div>
+
+## 🧭 How it works
+
+Every phase ends at a **gate**: no moving on until it passes.
+
+| Phase | Work | Gate |
 |---|---|---|
-| **0 · Concepto** | Brief, usos, idiomas, hipótesis de parámetros | Razón de ser escrita y primer sello de procedencia |
-| **1 · Prueba de concepto** | n, o, H, O; luego a, d, e, h, s | La idea se percibe en palabras y la persona la aprueba |
-| **2 · Primer borrador** | Minúsculas, mayúsculas, cifras, puntuación | Color uniforme en texto corrido |
-| **3 · Familia** | Pesos, anchuras, cursiva, versalitas | Másteres compatibles, sin saltos ni quiebros |
-| **4 · Cobertura** | Diacríticos, conjunto de glifos, idiomas | Texto real correcto en los idiomas del brief |
-| **5 · Ingeniería** | Kerning, features, métricas, nombres, hinting | Compilación de un comando y pruebas de conformación |
-| **6 · Calidad** | Control automático y revisión en entornos reales | Revisión humana |
-| **7 · Publicación** | WOFF2, CSS, licencia, auditoría final | Sin caracteres ni features perdidos, y procedencia completa |
+| **0 · Concept** | Brief, uses, languages, parameter hypotheses | Written reason to exist and first provenance seal |
+| **1 · Proof of concept** | n, o, H, O; then a, d, e, h, s | The idea reads in words and the person approves it |
+| **2 · First draft** | Lowercase, caps, figures, punctuation | Even color in running text |
+| **3 · Family** | Weights, widths, italic, small caps | Compatible masters, no jumps or kinks |
+| **4 · Coverage** | Diacritics, glyph set, languages | Real text correct in the brief's languages |
+| **5 · Engineering** | Kerning, features, metrics, naming, hinting | One-command build and shaping tests |
+| **6 · Quality** | Automated QA plus review in real environments | Signed-off human review |
+| **7 · Release** | WOFF2, CSS, license, final audit | No lost characters or features, full provenance |
 
-Es una síntesis propia de la investigación de esta skill, no un estándar publicado.
+This workflow is a synthesis of this skill's research, not a published standard.
 
-**Mirar es obligatorio.** Tras cada cambio, `proof.py` genera pruebas PNG que se revisan a ojo; `build.py` compila y ejecuta las puertas automáticas (OTS, coherencia, conformación con HarfBuzz, QA):
+**Looking is mandatory.** After every change, `proof.py` renders PNG proofs to be judged by eye; `build.py` compiles and runs the automated gates (OTS, consistency, HarfBuzz shaping, QA):
 
 <div align="center">
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/pruebas-palabras-dark.png">
-  <img src="docs/pruebas-palabras.png" alt="Prueba de palabras a dos cuerpos generada por proof.py" width="44%">
+  <img src="docs/pruebas-palabras.png" alt="Word proof at two sizes generated by proof.py" width="44%">
 </picture>&nbsp;&nbsp;<picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/pruebas-pesos-dark.png">
-  <img src="docs/pruebas-pesos.png" alt="La fuente variable del ejemplo en cinco pesos, generada por proof.py" width="46%">
+  <img src="docs/pruebas-pesos.png" alt="The example variable font at five weights, generated by proof.py" width="46%">
 </picture>
 
-<em>Pruebas reales de <code>proof.py</code> sobre la fuente variable del generador de ejemplo.</em>
+<em>Real <code>proof.py</code> output for the example generator's variable font.</em>
 
 </div>
 
-## 📦 Instalación
+## 📦 Installation
 
-Usa solo una de las dos vías, o la skill aparecerá dos veces.
+Use only one of the two routes, or the skill will show up twice.
 
-### Como plugin
+### As a plugin
 
 ```bash
 claude plugin marketplace add Pizarradas/syx--typography
 claude plugin install diseno-tipografias@diseno-tipografias
 ```
 
-También acepta la URL completa del repositorio. Se invoca como `/diseno-tipografias:diseno-tipografias`.
+The full repository URL also works. Invoke it as `/diseno-tipografias:diseno-tipografias`.
 
-Para actualizarla, ejecuta `claude plugin update diseno-tipografias@diseno-tipografias` y reinicia Claude Code. Para quitarla, usa `claude plugin uninstall diseno-tipografias`.
+To update, run `claude plugin update diseno-tipografias@diseno-tipografias` and restart Claude Code. To remove it, `claude plugin uninstall diseno-tipografias`.
 
-### Como skill personal
+### As a personal skill
 
 ```bash
 git clone https://github.com/Pizarradas/syx--typography.git ~/.claude/skills/diseno-tipografias
 ```
 
-Se invoca como `/diseno-tipografias`. Para actualizarla, ejecuta `git pull` en esa carpeta.
+Invoke it as `/diseno-tipografias`. To update, run `git pull` in that folder.
 
-## ⚙️ Requisitos
+## ⚙️ Requirements
 
-- Linux, macOS o Windows con WSL2. Las herramientas solo se han probado en Linux bajo WSL2.
-- [uv](https://docs.astral.sh/uv/getting-started/installation/) y git.
+- Linux, macOS, or Windows with WSL2. The toolchain has only been tested on Linux under WSL2.
+- [uv](https://docs.astral.sh/uv/getting-started/installation/) and git.
 
-La primera vez, la skill ejecuta `scripts/setup_env.sh`, que crea un entorno aislado en `~/.local/share/type-design/venv` con fontTools, fontmake, gftools y otras herramientas de PyPI; `setup_env.sh --qa` añade las de auditoría (Font Bakery, diffenator2). Nada se instala en el sistema. Cambia la ubicación con la variable `TYPE_DESIGN_VENV`.
+On first use the skill runs `scripts/setup_env.sh`, which creates an isolated environment at `~/.local/share/type-design/venv` with fontTools, fontmake, gftools and other PyPI tools; `setup_env.sh --qa` adds the audit tools (Font Bakery, diffenator2). Nothing is installed system-wide. Change the location with the `TYPE_DESIGN_VENV` variable.
 
-En Windows, guarda los proyectos en el sistema de archivos de WSL, no en `/mnt/c`: un UFO son cientos de archivos pequeños y ahí el I/O es varias veces más lento.
+On Windows, keep font projects inside the WSL filesystem, not under `/mnt/c`: a UFO is hundreds of small files, and I/O against the Windows drive is several times slower.
 
-`fontspector` es opcional: si está instalado, el control de calidad lo usa en lugar de Font Bakery.
+`fontspector` is optional: when installed, QA uses it instead of Font Bakery.
 
-## 🖥️ Programas recomendados
+## 🖥️ Recommended apps
 
-| Situación | Programa |
+| Situation | App |
 |---|---|
-| Por código, con Claude | UFO + designspace y fontmake |
-| Windows, gratis | Fontra Pak |
-| Windows, profesional | FontLab 9 |
-| macOS, profesional | Glyphs 4 |
+| By code, with Claude | UFO + designspace and fontmake |
+| Windows, free | Fontra Pak |
+| Windows, professional | FontLab 9 |
+| macOS, professional | Glyphs 4 |
 
-Los detalles y sus límites están en [`references/04-programas-y-toolchain.md`](references/04-programas-y-toolchain.md).
+Details and their limits live in [`references/04-programas-y-toolchain.md`](references/04-programas-y-toolchain.md).
 
-## 🧰 Qué incluye
+## 🧰 What's inside
 
 <details>
-<summary><strong>Herramientas</strong> (<code>scripts/</code>) — 12</summary>
+<summary><strong>Tools</strong> (<code>scripts/</code>) — 13</summary>
 
 <br>
 
-| Script | Función |
+| Script | Purpose |
 |---|---|
-| `setup_env.sh` | Instala la cadena en un entorno aislado; `--qa` añade las herramientas de auditoría |
-| `new_project.py` | Crea UFO, designspace, brief y registro |
-| `trazos.py`, `motor.py` | Dibujo por código: tensión y corte por proyecto, eje de contraste inclinado, superelipse, tapas, gota y losa; másteres compatibles por construcción |
-| `check_sources.py` | Compatibilidad, contornos, nodos en extremos, quiebros, inflexiones, anclas y enlaces de estilo |
-| `build.py` | Compila y verifica con OTS, coherencia, conformación y control de calidad |
-| `proof.py` | Pruebas PNG: control, palabras, texto, cascada, glifos, pesos, idiomas, oscuro |
-| `shape_tests.py` | Pruebas de conformación con HarfBuzz, también frente a un WOFF2 |
-| `coverage.py` | Cobertura de letras, signos y marcas por idioma |
-| `web_export.py` | WOFF2 y CSS, comprobando que no se pierden caracteres ni features |
-| `registro.py` | Procedencia por glifo y sellos con hash |
-| `copy_check.py` | Alarma de calco entre dos fuentes |
+| `setup_env.sh` | Installs the toolchain in an isolated environment; `--qa` adds the audit tools |
+| `sketch.py` | Sketch sheets: parametric variants to PNG with no project and no compilation |
+| `new_project.py` | Creates the UFO, designspace, brief and provenance log |
+| `trazos.py`, `motor.py` | Drawing by code: per-project tension and cut angle, inclined contrast axis, superellipse, caps, teardrop and slab; masters compatible by construction |
+| `check_sources.py` | Compatibility, contours, nodes at extremes, kinks, inflections, anchors and style links |
+| `build.py` | Compiles and verifies with OTS, consistency, shaping and QA |
+| `proof.py` | PNG proofs: control strings, words, text, waterfall, glyph grid, weights, languages, dark |
+| `shape_tests.py` | HarfBuzz shaping tests, also against a WOFF2 |
+| `coverage.py` | Per-language coverage of letters, marks and punctuation |
+| `web_export.py` | WOFF2 and CSS, verifying no characters or features get lost |
+| `registro.py` | Per-glyph provenance and hashed seals |
+| `copy_check.py` | Tracing alarm between two fonts |
 
 </details>
 
 <details>
-<summary><strong>Referencias</strong> (<code>references/</code>) — 9</summary>
+<summary><strong>Reference library</strong> (<code>references/</code>) — 9</summary>
 
 <br>
 
-| Archivo | Tema |
+| File | Topic |
 |---|---|
-| `01-brief-y-parametros.md` | Brief, vocabulario, parámetros y evidencia de legibilidad |
-| `02-dibujo-y-correcciones.md` | Correcciones ópticas, Bézier, pesos, cursivas y cifras |
-| `03-espaciado-y-kerning.md` | Espaciado y kerning |
-| `04-programas-y-toolchain.md` | Programas, cadena de herramientas y trampas conocidas |
-| `05-ingenieria-opentype.md` | Métricas, nombres, features, variables, hinting y control de calidad |
-| `06-idiomas-y-cobertura.md` | Conjuntos de glifos, español, diacríticos y otras escrituras |
-| `07-web.md` | Exportación, carga y rendimiento web |
-| `08-originalidad-licencias-ia.md` | Originalidad, derecho por territorios, licencias e IA |
-| `09-generos.md` | Restricciones por género tipográfico |
+| `01-brief-y-parametros.md` | Brief, vocabulary, parameters and legibility evidence |
+| `02-dibujo-y-correcciones.md` | Optical corrections, Béziers, weights, italics and figures |
+| `03-espaciado-y-kerning.md` | Spacing and kerning |
+| `04-programas-y-toolchain.md` | Apps, toolchain and known traps |
+| `05-ingenieria-opentype.md` | Metrics, naming, features, variable fonts, hinting and QA |
+| `06-idiomas-y-cobertura.md` | Glyph sets, Spanish, diacritics and other scripts |
+| `07-web.md` | Web export, loading and performance |
+| `08-originalidad-licencias-ia.md` | Originality, law by territory, licensing and AI |
+| `09-generos.md` | Constraints by typeface genre |
 
 </details>
 
-Las plantillas y ejemplos están en `assets/`.
+Templates and examples live in `assets/`.
 
-## 🔍 Qué esperar
+## 🔍 What to expect
 
-- **Fiable en lo verificable:** compatibilidad entre másteres, métricas, nombres, features, cobertura y compilación.
-- **Por código** rinde mejor en geométricas, modulares, monoespaciadas y de píxel. Una serifa de texto expresiva necesita a una persona que dibuje.
-- **No sustituye al ojo:** que todas las comprobaciones pasen demuestra conformidad, no calidad de diseño. Hay que revisar las pruebas y probar en navegadores, Windows, macOS, Word e impresión.
-- **No certifica la originalidad:** ninguna herramienta puede hacerlo. La skill aporta un método y deja constancia del proceso.
-- **Autoría con IA:** la protección jurídica de los contornos generados por IA es incierta y varía por país. La skill los registra por glifo para declararlos con honestidad.
-- **Datos fechados:** precios, versiones y soporte de navegadores corresponden a noviembre de 2026 y caducan. Revísalos antes de confiar en ellos.
-- **Base de conocimiento desigual:** varias obras canónicas se citan a través de fuentes secundarias, y muchas cifras son convenciones de oficio. Las referencias marcan el origen de cada dato y los desacuerdos entre fuentes.
+- **Reliable where verifiable:** master compatibility, metrics, naming, features, coverage and builds.
+- **By code** it performs best on geometric, modular, monospaced and pixel designs. An expressive text serif needs a person drawing.
+- **It does not replace the eye:** passing every check proves conformance, not design quality. Proofs must be reviewed, and the font tested in browsers, Windows, macOS, Word and print.
+- **It does not certify originality:** no tool can. The skill provides a method and documents the process.
+- **Authorship with AI:** legal protection of AI-generated outlines is uncertain and varies by country. The skill records them per glyph so they can be declared honestly.
+- **Dated facts:** prices, versions and browser support reflect November 2026 and will go stale. Re-check before relying on them.
+- **Uneven knowledge base:** several canonical books are cited through secondary sources, and many figures are trade conventions. The references label the origin of each claim and the disagreements between sources.
 
-La parte legal es orientativa y no constituye asesoramiento jurídico.
+The legal content is orientation only, not legal advice.
 
-## ⚖️ Licencia
+## ⚖️ License
 
-[MIT](LICENSE). Esta licencia cubre la skill, no las tipografías que crees con ella: su licencia la decides tú.
+[MIT](LICENSE). The license covers the skill, not the typefaces you create with it: their license is yours to decide.
 
 <br>
 
 <div align="center">
 
-<sub>El símbolo del banner y el espécimen están dibujados por <code>scripts/motor.py</code>, la propia herramienta de esta skill.</sub>
+<sub>The banner mark, the specimen and the sketch sheet are all drawn by <code>scripts/motor.py</code> and <code>scripts/sketch.py</code> — this skill's own tools.</sub>
 
 </div>

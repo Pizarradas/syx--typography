@@ -20,12 +20,14 @@ Siempre (sin configuración):
   K  aviso: salto de curvatura (G2) > ×3 en un nodo liso
   Z  zonas: si un borde superior o inferior cae a menos de 2 rebasamientos de una zona,
      debe caer EXACTAMENTE (±1 u) en ella o en su rebasamiento (BlueValues del UFO);
-     no se aplica a marcas combinantes (glifos con anclas «_»)
+     no se aplica a marcas combinantes (glifos con anclas «_»); un borde inferior entre la
+     línea base y el descendente («tierra de nadie») es error salvo en "zonas_libres"
   L  métricas: BlueValues coherentes con xHeight/capHeight; avisos de usWin
 
 Con verificar.json (reglas del diseño, todas opcionales):
   {"tolerancia": 1.0,
    "zonas_extra": {"730": ["h", "d"]},          altura → glifos ("*" = todos)
+   "zonas_libres": ["Q", "comma"],             bordes inferiores entre línea base y descendente
    "inflexiones": ["S", "s"],                  también lib["com.syx.curvas.inflexion"]
    "astas": {"H": [175, 129.6]},               glifo → [y de la horizontal, grosor]
    "contraste": {"O": {"eje": 20, "fino": 40.3}},   eje del fino desde la vertical
@@ -289,12 +291,18 @@ def zonas_ufo(u):
     return bordes, reb
 
 
-def zonas(g, inf, bordes, reb, extra, tol):
+def zonas(g, inf, bordes, reb, extra, tol, libres=()):
     if not g.contours or any(a.name.startswith("_") for a in g.anchors):
         return  # las marcas combinantes flotan por diseño: se juzgan con sus anclas
     _, y0, _, y1 = caja(g)
     propios = set(bordes) | {z for z, gs in extra.items() if "*" in gs or g.name in gs}
     inf.medida(g.name, "y", [round(y0, 2), round(y1, 2)])
+    # Tierra de nadie: un borde inferior claramente bajo la línea base que tampoco llega al
+    # descendente es casi siempre un trazo mal colocado (una U que cuelga), no una forma.
+    desc = min(propios)
+    if g.name not in libres and desc + 2 * reb < y0 < -2 * reb:
+        inf.err(g.name, "Z", f"borde inferior en {y0:.1f}: bajo la línea base sin llegar al descendente "
+                              f"({desc}); si es intencionado, decláralo en \"zonas_libres\"")
     for v, nom in ((y0, "inferior"), (y1, "superior")):
         cerca = [z for z in propios if abs(v - z) <= 2 * reb]
         if cerca and min(abs(v - z) for z in cerca) > tol:
@@ -431,7 +439,7 @@ def auditar(u, conf, inf):
             continue
         topologia(g, inf)
         curvas(g, inf, inflexion_ok=g.name in decl or bool(g.lib.get(LIB_INFLEXION)))
-        zonas(g, inf, bordes, reb, extra, tol)
+        zonas(g, inf, bordes, reb, extra, tol, set(conf.get("zonas_libres", [])))
     metricas(u, inf)
     if "astas" in conf:
         astas(u, inf, conf["astas"], tol)
@@ -528,6 +536,11 @@ def meta():
         hit = bool(inf.errores)
         ok &= hit == debe
         print(f"  cincel {y_der:<4} espera {'C' if debe else 'limpio'}: {'detectado' if hit else 'limpio'}")
+    # Tierra de nadie: una U cuyo trazo inferior cuelga 69 u (caso real de Lacre) debe fallar.
+    inf = Informe()
+    zonas(glifo("U_cuelga", [[(0, -83), (100, -83), (100, 700), (0, 700)]]), inf, {0, -14, 700, 714, -220}, 14, {}, 1.0)
+    ok &= bool(inf.errores)
+    print(f"  U cuelga   espera Z: {'detectado' if inf.errores else 'NO DETECTADO'}")
     print("AUTOPRUEBA:", "OK" if ok else "FALLA")
     return ok
 

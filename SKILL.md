@@ -97,7 +97,7 @@ $PY $SKILL/scripts/proof.py fonts/variable/*.ttf -o proofs --pagina control pala
 **Puerta:** la idea se percibe en palabras y lo aprueba la persona; `verificar.py` sin errores. Muéstrale las pruebas y pregunta. Primera auditoría de similitud.
 
 ### 2. Primer borrador
-Completa minúscula, mayúsculas, cifras y puntuación con espaciado grueso. Lee `references/03-espaciado-y-kerning.md`.
+Antes de propagar, pasa las medidas de lo aprobado a una retícula de decisiones (alturas por papel, anchuras por familia, laterales por clase, correcciones declaradas; `references/02-dibujo-y-correcciones.md` §4). Completa minúscula, mayúsculas, cifras y puntuación con espaciado grueso. Lee `references/03-espaciado-y-kerning.md`.
 **Puerta:** color uniforme en texto corrido (`proof.py --pagina texto cascada oscuro`). Segunda auditoría.
 
 ### 3. Familia

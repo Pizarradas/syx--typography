@@ -159,13 +159,32 @@ Entrega por grupos, no glifo a glifo: no pases de grupo sin mirar `proof.py --pa
 
 Razón: «letters must be alike enough to form rhythm, and distinct enough to be told apart» es la idea de [LettError](https://letterror.com/archive/badtype). Copiar geometría exacta no da coherencia; aplicar la misma regla sí.
 
+### Retícula de decisiones
+
+Antes de propagar más allá de los glifos aprobados, pasa sus medidas a un módulo del proyecto (plantilla: `assets/ejemplo_reticula.py`) y dibuja el resto **solo** con esos papeles:
+
+- **Alturas por papel**, no por letra: rama y hombro del arco (de n), unión de panza (de d), remates (de e y a), cintura (de e y S), barra (de H), unión baja (de P). La u reutiliza los de n por giro.
+- **Anchuras por familia**, derivadas: recta = n, mixta = d, arcada de m = 3 astas + 2 contraformas de n × corrección.
+- **Laterales por clase de borde**: asta, hombro, panza, redondo, abierto, diagonal.
+- **Correcciones ópticas declaradas**, con motivo y cantidad. Son la única forma legítima de salirse de la retícula.
+
+No es una retícula de dibujo: las curvas y los nodos siguen el modelo de escritura y no se ajustan a módulos, porque las correcciones ópticas son por definición desviaciones de la geometría.
+
+Evidencia [dato: Ganzúa Lacre, noviembre de 2026]: al pasar a la retícula la fase 2 de un alfabeto de 114 glifos dibujado número a número, aparecieron:
+- **Contraformas de m** a 0,84 de la de n por accidente.
+- **Uniones descuadradas**: K a 0,36 frente a Y a 0,42, y G que no casaba con H.
+- **N y M demasiado negras**: grosor medio 118 frente a 95 de H. Con la corrección, el coeficiente de variación del grosor de las versales bajó del 12,5 al 10,4 %.
+- **Una U y una J que colgaban 69 u bajo la línea base.** El verificador no lo veía y ahora tiene la regla de «tierra de nadie» (`zonas_libres`).
+
+Las anchuras, en cambio, ya eran coherentes. La retícula no las cambió: las hizo explícitas.
+
 ## 5. Proporciones por grupo
 
 **No se hallaron proporciones numéricas por letra ni para mayúsculas.** La relación letra a letra de a, e, s, g está en *Designing Type*, que no fue accesible. Lo siguiente son relaciones cualitativas; obtén las cantidades en la prueba.
 
 | Grupo | Letras | Reglas | Prueba |
 |---|---|---|---|
-| **Rectas minúsculas** | n h m u r i l | n como módulo; h de n y l; m de n, normalmente con contraformas más estrechas ([fuente: Briem](https://help.fontlab.com/fontlab/8/tutorials/briem/4-2-bold/briem-4-24-curves/)); hombro de n reutilizable en m (más estrecho) y h (cruce más bajo) ([Glyphs](https://glyphsapp.com/learn/smart-components)). Diferenciar u de n no ayudó a la u ([Bohm](https://typography.guru/journal/letters-symbols-misrecognition/), secundaria): no lo hagas solo por legibilidad | `nmnhnunrn`, `minimum` |
+| **Rectas minúsculas** | n h m u r i l | n como módulo; h de n y l; m de n, normalmente con contraformas más estrechas ([fuente: Briem](https://help.fontlab.com/fontlab/8/tutorials/briem/4-2-bold/briem-4-24-curves/)); la cantidad no está publicada: decláralo como corrección (0,92 fue la hipótesis en un proyecto) y juzga en `minimum`; hombro de n reutilizable en m (más estrecho) y h (cruce más bajo) ([Glyphs](https://glyphsapp.com/learn/smart-components)). Diferenciar u de n no ayudó a la u ([Bohm](https://typography.guru/journal/letters-symbols-misrecognition/), secundaria): no lo hagas solo por legibilidad | `nmnhnunrn`, `minimum` |
 | **Redondas minúsculas** | o c e b d p q | Panzas de b, d, p, q engordan como o y luego se ajusta la unión (Briem). c y e: abertura ligada a la apertura del brief | `obodopoqo`, `ocoeo` |
 | **Personalidad** | a s g f t j | Sin regla numérica. Ensanchar t y l ayudó ([Bohm](https://typography.guru/journal/letters-symbols-misrecognition/), secundaria). s: mueve el centro al condensar (Briem) | `adhesion`, `hamburgefonstiv` |
 | **Diagonales minúsculas** | v w y x k z | Contraforma de v alargada; en ultranegra, la pierna de k no puede igualar el asta y se afina, y un afinado leve puede pasar a la regular ([Briem](https://help.fontlab.com/fontlab/8/tutorials/briem/4-2-bold/briem-4-22-limits/)) | `nvnwnynxn`, `kayak` |

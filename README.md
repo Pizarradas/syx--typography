@@ -18,7 +18,10 @@
 
 <br><br>
 
-<img src="docs/especimen.png" alt="Espécimen de primitivas: anillos con eje de contraste a 0, 18 y 30 grados, superelipse y terminales" width="920">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/especimen-dark.png">
+  <img src="docs/especimen.png" alt="Espécimen de primitivas: anillos con eje de contraste a 0, 18 y 30 grados, superelipse y terminales" width="920">
+</picture>
 
 <em>Dibujado por el motor de la skill: eje de contraste inclinado, superelipse de Lamé y terminales<br>(tapas curvas, gota, losa). Los másteres salen compatibles por construcción.</em>
 
@@ -63,7 +66,13 @@ Es una síntesis propia de la investigación de esta skill, no un estándar publ
 
 <div align="center">
 
-<img src="docs/pruebas-palabras.png" alt="Prueba de palabras a dos cuerpos generada por proof.py" width="44%">&nbsp;&nbsp;<img src="docs/pruebas-pesos.png" alt="La fuente variable del ejemplo en cinco pesos, generada por proof.py" width="46%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/pruebas-palabras-dark.png">
+  <img src="docs/pruebas-palabras.png" alt="Prueba de palabras a dos cuerpos generada por proof.py" width="44%">
+</picture>&nbsp;&nbsp;<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/pruebas-pesos-dark.png">
+  <img src="docs/pruebas-pesos.png" alt="La fuente variable del ejemplo en cinco pesos, generada por proof.py" width="46%">
+</picture>
 
 <em>Pruebas reales de <code>proof.py</code> sobre la fuente variable del generador de ejemplo.</em>
 

@@ -1,0 +1,9 @@
+{
+ "tolerancia": 1.0,
+ "zonas_extra": {"730": ["h", "d", "l", "b", "k"]},
+ "inflexiones": ["S", "s"],
+ "astas": {"H": [175, 130], "n": [118, 120]},
+ "contraste": {"O": {"eje": 20, "fino": 40}, "o": {"eje": 20, "fino": 38}},
+ "cincel": {"angulo": 26, "excluir": ["A", "V", "W", "X", "Y", "v", "w", "x", "y", ".notdef"]},
+ "laterales": {"H": [77, 77], "n": [64, 51], "o": [45, 45]}
+}

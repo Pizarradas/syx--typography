@@ -121,6 +121,23 @@ Dibuja en cúbicas y convierte al compilar. cu2qu convierte juntas las curvas de
 
 No se halló ensayo de diseñadores que compare reutilización con excepciones. Regla de trabajo: reutiliza la estructura y corrige el resultado donde la vista lo pida.
 
+### Comprobación matemática
+
+Una prueba PNG no enseña un rebasamiento de 31 u donde el brief dice 14, un corte a 26° de la vertical donde la regla dice 26° del trazo, ni un lateral de −15 u. Todo eso apareció en un proyecto real que pasaba `check_sources.py` y se veía bien en palabras [dato: auditoría de este proyecto, noviembre de 2026]. `verificar.py` lo mide con tolerancias explícitas; `--meta` comprueba que el propio verificador detecta cada defecto inyectado.
+
+Errores que conviene evitar desde el generador [inferencia, a partir de esa auditoría]:
+
+| Error | Por qué ocurre | Regla |
+|---|---|---|
+| Rebasamiento doble | El eje de una curva horizontal se coloca con el fino nominal, pero con eje inclinado el trazo horizontal es más grueso | `reglas.eje_en_zona(zona, grosor_real)` |
+| Laterales desplazados | El avance se calcula desde la caja del dibujo y la tinta no empieza en x = 0 | `reglas.cerrar_desde_tinta` |
+| Regla de terminal incoherente | Astas cortadas respecto al trazo y curvas respecto a la vertical | Una sola definición: ángulo respecto a la perpendicular al trazo, con el eje como bisectriz de los dos bordes reales; mídela con `verificar.json` → `cincel` |
+| Restos de corte | Un corte booleano demasiado corto deja astillas; uno demasiado largo muerde otra parte de la letra | Corta el trazo aislado y con la raíz exacta de la cúbica (`trazo(..., ini=, fin=)` de `motor.py`) |
+| Espolones en uniones | La panza entra en el asta a la altura de un vértice del asta | Que el remate de la panza quede dentro del asta; `verificar.py` marca rectas < 15 u entre dos esquinas |
+| Quiebros por redondeo | Tiradores cortos redondeados a enteros | `reglas.alinear_tiradores` |
+
+Al escribir comprobaciones propias, pruébalas con defectos inyectados antes de confiar en ellas: en esa misma auditoría, dos signos invertidos dejaron el test del triángulo y un límite de tensión sin efecto, y el informe decía «sin errores».
+
 ## 4. Orden de propagación
 
 Secuencia sintetizada [inferencia]; ninguna fuente la da completa. Empezar por n es lo común, porque sus formas se repiten ([fuente: Glyphs](https://glyphsapp.com/learn/sketching)): primero estructura, luego esqueleto recto, igualar astas, fijar rebasamiento y al final las curvas.

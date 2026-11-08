@@ -4,13 +4,13 @@
 
 <br><br>
 
-<strong>A <a href="https://code.claude.com/docs/en/skills">Claude Code</a> skill that designs and produces original typefaces end to end:<br>from the brief to the WOFF2, with checks at every phase and per-glyph provenance records.</strong>
+<strong>An <a href="https://agentskills.io">Agent Skill</a> that designs and produces original typefaces end to end:<br>from the brief to the WOFF2, with checks at every phase and per-glyph provenance records.</strong>
 
 <br><br>
 
-<img src="https://img.shields.io/badge/skill-Claude_Code-111111?style=flat-square" alt="Claude Code skill">
+<img src="https://img.shields.io/badge/Agent_Skills-open_standard-111111?style=flat-square" alt="Agent Skills open standard">
 <img src="https://img.shields.io/badge/phases-0%E2%86%927-a31621?style=flat-square" alt="phases 0 to 7">
-<img src="https://img.shields.io/badge/scripts-13-57534e?style=flat-square" alt="13 scripts">
+<img src="https://img.shields.io/badge/scripts-16-57534e?style=flat-square" alt="16 scripts">
 <img src="https://img.shields.io/badge/references-9-57534e?style=flat-square" alt="9 references">
 <img src="https://img.shields.io/badge/UFO%20+%20designspace-fontmake-2b6cb0?style=flat-square" alt="UFO + designspace with fontmake">
 <img src="https://img.shields.io/badge/web-WOFF2-5b8c5a?style=flat-square" alt="exports WOFF2">
@@ -31,7 +31,7 @@
 
 ---
 
-It works with UFO + designspace sources and compiles with fontmake. It can draw by code, or act as the engineering and QA partner of a person drawing in Fontra, FontLab or Glyphs. The skill's instructions and reference library are written in Spanish; use it in any language — the agent reads them natively.
+It follows the open [Agent Skills](https://agentskills.io/specification) format, so it works with any compatible agent that can run shell commands and look at PNG images (Claude Code, OpenAI Codex, Gemini CLI, Cursor, GitHub Copilot and others). It works with UFO + designspace sources and compiles with fontmake. It can draw by code, or act as the engineering and QA partner of a person drawing in Fontra, FontLab or Glyphs. The skill's instructions and reference library are written in Spanish; use it in any language — the agent reads them natively.
 
 ## ✍️ What you can ask for
 
@@ -95,26 +95,17 @@ This workflow is a synthesis of this skill's research, not a published standard.
 
 ## 📦 Installation
 
-Use only one of the two routes, or the skill will show up twice.
-
-### As a plugin
+Clone the repository into your agent's skills folder **as `diseno-tipografias`**: the Agent Skills format requires the folder name to match the skill's `name`.
 
 ```bash
-claude plugin marketplace add Pizarradas/syx--typography
-claude plugin install diseno-tipografias@diseno-tipografias
-```
-
-The full repository URL also works. Invoke it as `/diseno-tipografias:diseno-tipografias`.
-
-To update, run `claude plugin update diseno-tipografias@diseno-tipografias` and restart Claude Code. To remove it, `claude plugin uninstall diseno-tipografias`.
-
-### As a personal skill
-
-```bash
+# Claude Code (personal skills)
 git clone https://github.com/Pizarradas/syx--typography.git ~/.claude/skills/diseno-tipografias
+
+# Agents that read the shared project convention
+git clone https://github.com/Pizarradas/syx--typography.git .agents/skills/diseno-tipografias
 ```
 
-Invoke it as `/diseno-tipografias`. To update, run `git pull` in that folder.
+For any other agent, use the skills folder its documentation gives. The agent picks the skill up from its description when a request matches; agents with explicit invocation can also call it by name. To update, run `git pull` in that folder.
 
 ## ⚙️ Requirements
 
@@ -131,7 +122,7 @@ On Windows, keep font projects inside the WSL filesystem, not under `/mnt/c`: a 
 
 | Situation | App |
 |---|---|
-| By code, with Claude | UFO + designspace and fontmake |
+| By code, with an agent | UFO + designspace and fontmake |
 | Windows, free | Fontra Pak |
 | Windows, professional | FontLab 9 |
 | macOS, professional | Glyphs 4 |

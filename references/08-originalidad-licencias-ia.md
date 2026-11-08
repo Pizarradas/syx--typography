@@ -332,7 +332,7 @@ Una frase pública es una afirmación verificable: debe poder sostenerse con el 
 | «Sin coincidencias relevantes en las herramientas usadas el {fecha}» | «0 % de similitud», «98 % original» | Ningún porcentaje vale como prueba |
 | «Contornos generados por código a partir de reglas de {persona} y revisados por {persona}» | «100 % a mano», «artesanal», si hubo código o IA | Sería falso |
 | «Se usó IA en {tareas}; detalle por glifo disponible» | «Hecha sin IA», si la hubo en contornos | Sería falso; el agente ya es IA |
-| «{N} de {T} glifos redibujados a mano por {persona}» | «Diseñada por Claude», «autoría de la IA» | El agente no reclama autoría |
+| «{N} de {T} glifos redibujados a mano por {persona}» | «Diseñada por [nombre del modelo o del agente]», «autoría de la IA» | El agente no reclama autoría |
 | «Revival de {fuente}, por {autor}; cambios: {lista}» | «Inspirada en» para ocultar un revival | Oculta el origen |
 | «Licencia OFL 1.1» o «Licencia en {URL}» | «Protegida en todo el mundo», «con copyright garantizado» | La protección es territorial e incierta |
 | «Sigue el género grotesco» | «Como {fuente}, pero gratis», «alternativa a {fuente}» sin revisar | Riesgo de marca y confesión de copia [inferencia] |

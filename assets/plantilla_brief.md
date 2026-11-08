@@ -28,6 +28,17 @@ Qué hace esta tipografía que las existentes no hacen bien, y para quién.
 | Apertura | | | |
 | Espaciado | | | |
 
+## Retícula de decisiones (se escribe al aprobar la fase 1)
+Medidas en `reticula.py`, cada una con el glifo aprobado del que sale. Aquí, solo el resumen y las desviaciones.
+| Papel | Valor | Origen |
+|---|---|---|
+| Alturas (rama, hombro, panza, remates, cintura, barra, unión) | | |
+| Anchuras por familia (recta, mixta, abierta, diagonal, estrecha; versales) | | |
+| Laterales por clase de borde | | |
+
+| Corrección óptica declarada | Cantidad | Motivo | Prueba que la juzga |
+|---|---|---|---|
+
 ## Referencias y función
 Cada referencia informa el género, nunca los contornos.
 | Referencia | Qué se mira | Qué se evita |

@@ -168,6 +168,8 @@ Antes de propagar más allá de los glifos aprobados, pasa sus medidas a un mód
 - **Laterales por clase de borde**: asta, hombro, panza, redondo, abierto, diagonal.
 - **Correcciones ópticas declaradas**, con motivo y cantidad. Son la única forma legítima de salirse de la retícula.
 
+Comprueba la deuda con `scripts/reticula.py PROYECTO`: lista los anchos escritos a mano, las alturas estructurales como fracción literal de una zona y los laterales con cifras. Una excepción de un solo glifo se declara en su línea (`# retícula: motivo`) y queda listada. Pasar la puerta de la fase 2 exige cero medidas sueltas sin declarar.
+
 No es una retícula de dibujo: las curvas y los nodos siguen el modelo de escritura y no se ajustan a módulos, porque las correcciones ópticas son por definición desviaciones de la geometría.
 
 Evidencia [dato: Ganzúa Lacre, noviembre de 2026]: al pasar a la retícula la fase 2 de un alfabeto de 114 glifos dibujado número a número, aparecieron:

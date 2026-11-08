@@ -90,7 +90,8 @@ def main():
         (a.path / d).mkdir()
 
     if a.wght:
-        lo, de, hi = (int(v) for v in a.wght.split(":"))
+        vals = [int(v) for v in a.wght.split(":")]
+        lo, de, hi = vals if len(vals) == 3 else (vals[0],) * 3  # «--wght 400»: un solo máster
         master_vals = sorted({lo, de, hi}) if de not in (lo, hi) else sorted({lo, hi})
     else:
         lo = de = hi = 400
@@ -133,6 +134,7 @@ def main():
         "# Sin languagesystem, kern y mark solo actúan en DFLT y las marcas no se colocan en latín.\n"
         "languagesystem DFLT dflt;\nlanguagesystem latn dflt;\n", encoding="utf-8")
     shutil.copy(ASSETS / "plantilla_brief.md", a.path / "BRIEF.md")
+    shutil.copy(ASSETS / "ejemplo_reticula.py", a.path / "reticula.py")  # se rellena al aprobar la fase 1
     shutil.copy(ASSETS / "plantilla_procedencia.csv", a.path / "registro" / "procedencia_glifos.csv")
     shutil.copy(ASSETS / "shaping_base.json", a.path / "tests" / "shaping.json")
     (a.path / ".gitignore").write_text("fonts/\nproofs/\nweb/\nqa/\nsources/config.yaml\n__pycache__/\n*.pyc\ninstance_ufo/\nmaster_ufo/\n", encoding="utf-8")

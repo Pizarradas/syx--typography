@@ -67,8 +67,8 @@ Every phase ends at a **gate**: no moving on until it passes.
 | Phase | Work | Gate |
 |---|---|---|
 | **0 · Concept** | Brief, uses, languages, parameter hypotheses | Written reason to exist and first provenance seal |
-| **1 · Proof of concept** | n, o, H, O; then a, d, e, h, s | The idea reads in words and the person approves it |
-| **2 · First draft** | Lowercase, caps, figures, punctuation | Even color in running text |
+| **1 · Proof of concept** | n, o, H, O; then a, d, e, h, s | The idea reads in words and the person approves it; their measurements become the decision grid (`reticula.py`) |
+| **2 · First draft** | Lowercase, caps, figures, punctuation, drawn only from the decision grid | No loose structural measurements (`reticula.py --estricto`) and even color in running text |
 | **3 · Family** | Weights, widths, italic, small caps | Compatible masters, no jumps or kinks |
 | **4 · Coverage** | Diacritics, glyph set, languages | Real text correct in the brief's languages |
 | **5 · Engineering** | Kerning, features, metrics, naming, hinting | One-command build and shaping tests |
@@ -145,6 +145,7 @@ Details and their limits live in [`references/04-programas-y-toolchain.md`](refe
 | `check_sources.py` | Compatibility, contours, nodes at extremes, kinks, inflections, anchors and style links |
 | `verificar.py` | Mathematical audit with explicit tolerances: topology, exact zones, kinks, handles, G2 and the brief's rules (`verificar.json`); `--meta` tests itself |
 | `reglas.py` | Construction rules: translation-contrast thickness, nodes placed with the real stroke width, advance from the ink, handles realigned on the grid, G2 harmonization |
+| `reticula.py` | Decision-grid audit: lists hand-typed widths, junction and bar heights and sidebearings that don't come from the project's grid |
 | `cincel.py` | Chisel terminals with one rule for straight and curved strokes: exact trim and angle solved against the real edges |
 | `build.py` | Compiles and verifies with OTS, consistency, shaping and QA; usWin never below the line metrics, so an unfinished font does not clip fallback text on Windows |
 | `proof.py` | PNG proofs: control strings, words, text, waterfall, glyph grid, weights, languages, dark |

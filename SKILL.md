@@ -94,11 +94,14 @@ $PY $SKILL/scripts/build.py PROYECTO --rapido
 $PY $SKILL/scripts/proof.py fonts/variable/*.ttf -o proofs --pagina control palabras --texto "..."
 ```
 `verificar.py` audita lo que una prueba PNG no deja ver (zonas exactas, quiebros con tolerancia de rejilla, islas, espolones, tiradores) y, con un `verificar.json` del proyecto, las reglas del brief: astas, eje del contraste, ángulo de corte y laterales. Escribe ese archivo con las cifras del brief en cuanto existan; plantilla en `assets/verificar_ejemplo.json`.
-**Puerta:** la idea se percibe en palabras y lo aprueba la persona; `verificar.py` sin errores. Muéstrale las pruebas y pregunta. Primera auditoría de similitud.
+**Puerta:** la idea se percibe en palabras y lo aprueba la persona; `verificar.py` sin errores. Muéstrale las pruebas y pregunta. Primera auditoría de similitud. Al aprobarse, escribe la retícula de decisiones en `reticula.py` (plantilla copiada por `new_project.py`) con las medidas de esos glifos y resúmela en `BRIEF.md`.
 
 ### 2. Primer borrador
-Antes de propagar, pasa las medidas de lo aprobado a una retícula de decisiones (alturas por papel, anchuras por familia, laterales por clase, correcciones declaradas; `references/02-dibujo-y-correcciones.md` §4). Completa minúscula, mayúsculas, cifras y puntuación con espaciado grueso. Lee `references/03-espaciado-y-kerning.md`.
-**Puerta:** color uniforme en texto corrido (`proof.py --pagina texto cascada oscuro`). Segunda auditoría.
+Completa minúscula, mayúsculas, cifras y puntuación con espaciado grueso, **dibujando solo con la retícula**: alturas por papel, anchuras por familia, laterales por clase de borde y correcciones ópticas declaradas (`references/02-dibujo-y-correcciones.md` §4). Pasa también a la retícula los glifos de la fase 1, que son su origen. Si un glifo pide una medida que no está, decide si es un papel nuevo (añádelo) o una corrección (declárala con motivo y prueba); nunca un número suelto. Lee `references/03-espaciado-y-kerning.md`.
+```bash
+$PY $SKILL/scripts/reticula.py PROYECTO --estricto
+```
+**Puerta:** `reticula.py` sin medidas estructurales sueltas (las declaradas con `# retícula: motivo` pasan, y se revisan con la persona); color uniforme en texto corrido (`proof.py --pagina texto cascada oscuro`). Segunda auditoría.
 
 ### 3. Familia
 Extremos de peso y anchura, cursiva, versalitas. Los másteres van en los extremos; añade intermedios solo si falla la interpolación. Nunca publiques extrapolaciones.
@@ -158,7 +161,7 @@ Elige el origen con rigor: una petición abstracta no es una regla humana, y apr
 - Usa `scripts/motor.py` para trazos con grosor variable, cortes de terminal y anillos, y `scripts/trazos.py` para contornos directos. Un corte debe actuar siempre sobre el mismo segmento: si cambia de segmento según el máster, cambia el número de puntos.
 - La tensión (`k`, `ki`), el ángulo de corte (`corte`), el eje del contraste (`anillo_eje`), la superelipse (`superovalo`, `k_superelipse`) y los terminales (`tapa` curva, gota con `punto`, `losa`) son **estilo del proyecto**: decídelos en el brief y pásalos al constructor de `G`. No aceptes los valores por defecto del módulo sin un motivo.
 - Recoge los fallos por glifo y guarda los másteres solo al final. Un fallo a medio máster deja archivos desiguales y `check_sources.py` da decenas de errores que esconden la causa.
-- Pon los parámetros en un solo lugar y deriva de ellos asta, fino, rebasamiento y espaciado. No dupliques números por glifo.
+- Pon los parámetros en un solo lugar y deriva de ellos asta, fino, rebasamiento y espaciado. No dupliques números por glifo: desde la fase 2, las alturas de unión y barra, las anchuras y los laterales salen de `reticula.py`; la forma de cada curva (sus nodos) sigue siendo libre.
 - Coloca cada nodo con el grosor **real** del trazo en ese punto, no con el nominal: con contraste de eje inclinado, un trazo horizontal no mide el fino (`reglas.grosor_traslacion`, `reglas.eje_en_zona`). Si no, los rebasamientos salen del doble sin que se note en la prueba.
 - Fija el avance desde la tinta real (`reglas.cerrar_desde_tinta`), no desde la caja del dibujo: curvas, cortes y uniones rara vez empiezan en x = 0.
 - Tras redondear a enteros, recupera la continuidad de los nodos lisos (`reglas.alinear_tiradores`): con tiradores cortos, el redondeo crea quiebros de 2–3°.
@@ -180,6 +183,7 @@ Elige el origen con rigor: una petición abstracta no es una regla humana, y apr
 | `scripts/check_sources.py` | Compatibilidad, contornos abiertos, nodos en extremos, tensiones |
 | `scripts/verificar.py` | Auditoría matemática con tolerancias: topología, zonas exactas, quiebros, tiradores, G2 y reglas del brief (`verificar.json`); `--meta` se prueba a sí mismo |
 | `scripts/reglas.py` | Reglas de construcción: grosor de traslación, eje en zona con grosor real, avance desde la tinta, tiradores alineados en la rejilla, armonización G2 |
+| `scripts/reticula.py` | Lista las medidas estructurales sueltas (anchos, alturas de unión y barra, laterales) que no salen de la retícula del proyecto; `--estricto` para la puerta de la fase 2 |
 | `scripts/cincel.py` | Terminales a cincel con regla única (ángulo respecto a la perpendicular al trazo), recorte exacto y ángulo por punto fijo |
 | `scripts/build.py` | Compila y ejecuta OTS, coherencia, conformación, fontc y QA |
 | `scripts/proof.py` | Pruebas PNG: control, palabras, texto, cascada, glifos, pesos, idiomas, oscuro |

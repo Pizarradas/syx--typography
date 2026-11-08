@@ -28,6 +28,10 @@ PY=~/.local/share/type-design/venv/bin/python
 [ -x "$PY" ] || bash ${CLAUDE_SKILL_DIR}/scripts/setup_env.sh
 ```
 
+En WSL, crea los proyectos dentro del sistema de archivos de Linux (`~/…`), nunca bajo
+`/mnt/c`: un UFO son cientos de archivos pequeños y el I/O al disco de Windows es varias
+veces más lento en cada compilación.
+
 Después fija cuatro cosas. Pregunta solo lo que no se pueda deducir del pedido. Si el encargo es «hazlo todo tú» o no se puede preguntar, decide con los valores por defecto, marca cada decisión como *pendiente de aprobación* en `BRIEF.md` y en el informe, y registra los glifos como `ia-generado`: el nombre, la licencia y la autoría siguen siendo de la persona.
 
 - **Uso:** medio, cuerpos, idiomas, licencia.
@@ -52,6 +56,12 @@ Lee `references/01-brief-y-parametros.md`. Escribe por qué debe existir, usos, 
 
 ### 1. Prueba de concepto
 Dibuja n, o, H, O; luego a, d, e, h, s. Lee `references/02-dibujo-y-correcciones.md`. Si dibujas por código, usa `scripts/trazos.py` y el patrón de `assets/ejemplo_generador.py`.
+
+Si el concepto no está cerrado, genera 2 o 3 **variantes de parámetros deliberadamente
+distantes** (tensión, ángulo de corte, eje del contraste, apertura, anchura: las palancas de
+`references/01`), compílalas con `--rapido` y enseña las pruebas lado a lado: la persona elige
+y la elección queda anotada en `BRIEF.md`. Con el motor paramétrico la exploración es casi
+gratis, y es lo que evita que todos los proyectos hereden los mismos valores por defecto.
 ```bash
 $PY ${CLAUDE_SKILL_DIR}/scripts/check_sources.py sources/Familia.designspace
 $PY ${CLAUDE_SKILL_DIR}/scripts/build.py PROYECTO --rapido
@@ -87,6 +97,7 @@ $PY ${CLAUDE_SKILL_DIR}/scripts/build.py PROYECTO --con-fontc
 
 ### 6. Calidad
 ```bash
+bash ${CLAUDE_SKILL_DIR}/scripts/setup_env.sh --qa            # una vez: añade Font Bakery y diffenator2
 $PY ${CLAUDE_SKILL_DIR}/scripts/build.py PROYECTO --qa        # informes en qa/; --solo-qa no recompila
 ```
 Resuelve o justifica cada FAIL. Una compilación con QA vacío es un error, no un aprobado. Prueba en lo que el agente no puede ver: navegadores reales (Playwright y Chromium pueden no estar disponibles), Windows a baja densidad, macOS, Word, impresión. Pide esa revisión a la persona, con una lista concreta.
@@ -118,6 +129,7 @@ Elige el origen con rigor: una petición abstracta no es una regla humana, y apr
 
 - Cada glifo es una función de parámetros que emite siempre la misma secuencia de puntos. La compatibilidad entre másteres queda garantizada por construcción.
 - Usa `scripts/motor.py` para trazos con grosor variable, cortes de terminal y anillos, y `scripts/trazos.py` para contornos directos. Un corte debe actuar siempre sobre el mismo segmento: si cambia de segmento según el máster, cambia el número de puntos.
+- La tensión (`k`, `ki`), el ángulo de corte (`corte`), el eje del contraste (`anillo_eje`), la superelipse (`superovalo`, `k_superelipse`) y los terminales (`tapa` curva, gota con `punto`, `losa`) son **estilo del proyecto**: decídelos en el brief y pásalos al constructor de `G`. No aceptes los valores por defecto del módulo sin un motivo.
 - Recoge los fallos por glifo y guarda los másteres solo al final. Un fallo a medio máster deja archivos desiguales y `check_sources.py` da decenas de errores que esconden la causa.
 - Pon los parámetros en un solo lugar y deriva de ellos asta, fino, rebasamiento y espaciado. No dupliques números por glifo.
 - Evita la geometría pura. Compensa curvas frente a rectas, horizontales frente a verticales, uniones y mayúsculas frente a minúsculas. Un círculo perfecto se ve mal.
@@ -128,10 +140,10 @@ Elige el origen con rigor: una petición abstracta no es una regla humana, y apr
 
 | Script | Para qué |
 |---|---|
-| `scripts/setup_env.sh` | Instala la cadena en un entorno aislado |
+| `scripts/setup_env.sh` | Instala la cadena en un entorno aislado; `--qa` añade las herramientas de auditoría |
 | `scripts/new_project.py` | Crea UFO, designspace, brief y registro |
 | `scripts/trazos.py` | Contornos directos: rectas, óvalos, componentes, anclas |
-| `scripts/motor.py` | Motor de trazos: esqueleto a contorno, con cortes de terminal y anillos |
+| `scripts/motor.py` | Motor de trazos: esqueleto a contorno, cortes y tapas de terminal, anillos (también de eje inclinado), gota y losa |
 | `scripts/check_sources.py` | Compatibilidad, contornos abiertos, nodos en extremos, tensiones |
 | `scripts/build.py` | Compila y ejecuta OTS, coherencia, conformación, fontc y QA |
 | `scripts/proof.py` | Pruebas PNG: control, palabras, texto, cascada, glifos, pesos, idiomas, oscuro |

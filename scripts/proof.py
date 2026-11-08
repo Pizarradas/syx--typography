@@ -236,8 +236,6 @@ def main():
         print(destino)
     if FALTANTES:
         print(f"AVISO: caracteres sin glifo, omitidos en las pruebas: {''.join(sorted(FALTANTES))}")
-    if FALTANTES:
-        print(f"AVISO: caracteres sin glifo, omitidos en las pruebas: {''.join(sorted(FALTANTES))}")
 
 
 if __name__ == "__main__":

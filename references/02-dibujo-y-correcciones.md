@@ -101,7 +101,7 @@ Reglas de [Glyphs, Drawing good paths](https://glyphsapp.com/learn/drawing-good-
 9. **Estructura idéntica entre másteres**: mismos puntos, mismo orden e inicio.
 10. **Dirección**: exterior antihorario y contraforma horario en la convención de Glyphs. Ninguna fuente aquí confirma la dirección inversa en TrueType; las herramientas de compilación suelen encargarse.
 
-`check_sources.py` bloquea por incompatibilidad, contornos abiertos, unicodes duplicados y componentes rotos. Avisa de extremos sin nodo, manejadores nulos, curvas fuera del triángulo y quiebros: esos avisos requieren criterio, porque hay excepciones legítimas.
+`check_sources.py` bloquea por incompatibilidad, contornos abiertos, unicodes duplicados y componentes rotos. Avisa de extremos sin nodo, manejadores nulos, curvas fuera del triángulo, quiebros (uniones casi colineales, de 1,5 a 20°) e inflexiones dentro de un segmento (regla 4): esos avisos requieren criterio, porque hay excepciones legítimas.
 
 ### Tensión de curva
 

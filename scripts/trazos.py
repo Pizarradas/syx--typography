@@ -9,6 +9,17 @@ Convención UFO/PostScript: contorno exterior antihorario, contraforma horaria.
 K_CIRCULO = 0.5523  # tensión de un círculo; las curvas tipográficas suelen ir de 0,55 a 0,76
 
 
+def k_superelipse(n):
+    """Tensión que aproxima una superelipse de Lamé |x/rx|^n + |y/ry|^n = 1.
+
+    Derivación: el punto medio de la cúbica, (p0+3c1+3c2+p3)/8, debe pasar por el
+    punto de la curva a 45°, (rx·2^(-1/n), ry·2^(-1/n)). Con n=2 devuelve
+    exactamente la constante del círculo. Válida hasta n≈5: en n=5,19 el manejador
+    alcanza el cruce de tangentes; para algo aún más cuadrado, parte cada
+    cuadrante en dos segmentos."""
+    return (8 * 2 ** (-1 / n) - 4) / 3
+
+
 def _r(v):
     return round(v)
 
@@ -54,6 +65,11 @@ class Glifo:
                           ((cx - rx, cy + hy), (cx - hx, cy + ry), (cx, cy + ry)),
                           ((cx + hx, cy + ry), (cx + rx, cy + hy), (cx + rx, cy)),
                           ((cx + rx, cy - hy), (cx + hx, cy - ry), (cx, cy - ry)))
+
+    def superovalo(self, cx, cy, rx, ry, n=2.5, horario=False):
+        """Óvalo superelíptico: n=2 círculo, 2,5 el clásico de Piet Hein, 4 casi
+        rectángulo redondeado. La tensión sale de k_superelipse(n)."""
+        self.ovalo(cx, cy, rx, ry, kx=k_superelipse(n), horario=horario)
 
     def componente(self, base, dx=0, dy=0):
         self.pen.addComponent(base, (1, 0, 0, 1, _r(dx), _r(dy)))

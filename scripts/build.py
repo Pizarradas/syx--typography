@@ -16,6 +16,8 @@ from pathlib import Path
 
 import ufoLib2
 from fontTools.designspaceLib import DesignSpaceDocument
+
+import check_sources
 from fontTools.pens.boundsPen import BoundsPen
 from fontTools.ttLib import TTFont
 from fontTools.varLib.instancer import setMacOverlapFlags
@@ -30,9 +32,8 @@ def run(cmd, cwd=None, quiet=True):
     return r
 
 
-def preparar(proj, ds):
+def preparar(proj, ds, ufos):
     fea = (proj / "sources" / "features.fea").read_text(encoding="utf-8")
-    ufos = [ufoLib2.Font.open(s.path) for s in ds.sources]
     ymax, ymin = 0, 0
     for u in ufos:
         for g in u:
@@ -46,11 +47,13 @@ def preparar(proj, ds):
     if antes != (win_a, win_d):
         print(f"AVISO: usWin cambia de {antes} a {(win_a, win_d)}: afecta al interlineado en programas sin USE_TYPO_METRICS")
     for u in ufos:
-        u.features.text = fea
         i = u.info
+        if u.features.text == fea and (i.openTypeOS2WinAscent, i.openTypeOS2WinDescent) == (win_a, win_d):
+            continue  # nada que escribir: evita reescribir cientos de .glif por iteración
+        u.features.text = fea
         i.openTypeOS2WinAscent, i.openTypeOS2WinDescent = win_a, win_d
         u.save(overwrite=True)
-    return {"win": [ufos[0].info.openTypeOS2WinAscent, ufos[0].info.openTypeOS2WinDescent]}
+    return {"win": [win_a, win_d]}
 
 
 def extremos_con_marcas(ufos, ymin, ymax):
@@ -163,7 +166,12 @@ def pasar_qa(proj):
     salida, error = [], False
     (proj / "qa").mkdir(exist_ok=True)
     fs = shutil.which("fontspector") or (Path.home() / ".local/bin/fontspector")
-    herr = "fontspector" if Path(fs).exists() else "fontbakery"
+    if Path(fs).exists():
+        herr = "fontspector"
+    elif (BIN / "fontbakery").exists():
+        herr = "fontbakery"
+    else:
+        return [{"ERROR": "ni fontspector ni fontbakery instalados: ejecuta setup_env.sh --qa"}], True
     for carpeta in ("ttf", "variable"):
         rutas = sorted((proj / "fonts" / carpeta).glob("*.ttf"))
         if not rutas:
@@ -200,13 +208,15 @@ def main():
         print(json.dumps(qa, ensure_ascii=False, indent=2))
         sys.exit(1 if err else 0)
 
-    r = run([BIN / "python", HERE / "check_sources.py", ds_path])
-    print(r.stdout)
-    if r.returncode != 0:
+    # El control y la preparación comparten los UFOs cargados: una sola lectura por iteración.
+    ufos = [ufoLib2.Font.open(s.path) for s in ds.sources]
+    chk, nu, ng = check_sources.revisar(ds, ufos)
+    check_sources.informe(chk, nu, ng)
+    if chk["ERROR"]:
         sys.exit("Fuentes con errores bloqueantes: se detiene la compilación.")
 
-    inf = preparar(proj, ds)
-    shutil.rmtree(proj / "fonts", ignore_errors=True)
+    inf = preparar(proj, ds, ufos)
+    shutil.rmtree(proj / "fonts", ignore_errors=True)  # sin restos: las puertas solo ven lo recién compilado
     ok, log = compilar(proj, ds_path, ds, a.rapido)
     res = {"compilacion": ok, **inf, "fonts": [str(f.relative_to(proj)) for f in fuentes(proj)]}
     if not ok:

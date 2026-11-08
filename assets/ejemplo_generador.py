@@ -16,10 +16,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from trazos import Glifo
 
 # Parámetros por valor de wght. Las astas siguen una curva cóncava, no una recta.
+# La tensión (k_ext, k_int) viaja aquí porque es estilo del proyecto, no del motor:
+# cada diseño decide la suya en el brief. NO copies estas cifras: son de este ejemplo.
 PARAMS = {
-    300: dict(asta=66, fino=60, n=380, o=460, H=560, O=640, lat_n=68),
-    400: dict(asta=92, fino=82, n=400, o=480, H=590, O=670, lat_n=62),
-    700: dict(asta=168, fino=138, n=440, o=520, H=640, O=720, lat_n=46),
+    300: dict(asta=66, fino=60, n=380, o=460, H=560, O=640, lat_n=68, k_ext=0.58, k_int=0.56),
+    400: dict(asta=92, fino=82, n=400, o=480, H=590, O=670, lat_n=62, k_ext=0.58, k_int=0.56),
+    700: dict(asta=168, fino=138, n=440, o=520, H=640, O=720, lat_n=46, k_ext=0.60, k_int=0.58),
 }
 REB = 12  # rebasamiento
 
@@ -50,8 +52,8 @@ def n(u, p, m):
 def o(u, p, m):
     x, s, f, w = m["x"], p["asta"], p["fino"], p["o"]
     g = Glifo(u, "o", 0x6F, lsb=round(p["lat_n"] * 0.62), rsb=round(p["lat_n"] * 0.62))
-    g.ovalo(w / 2, x / 2, w / 2, x / 2 + REB, 0.58, 0.58)
-    g.ovalo(w / 2, x / 2, w / 2 - s * 1.1, x / 2 + REB - f, 0.56, 0.56, horario=True)
+    g.ovalo(w / 2, x / 2, w / 2, x / 2 + REB, p["k_ext"], p["k_ext"])
+    g.ovalo(w / 2, x / 2, w / 2 - s * 1.1, x / 2 + REB - f, p["k_int"], p["k_int"], horario=True)
     g.ancla("top", w / 2, x + REB)
     g.cerrar(w)
 
@@ -67,8 +69,8 @@ def H(u, p, m):
 def O(u, p, m):
     c, s, f, w = m["cap"], p["asta"] * 1.13, p["fino"], p["O"]
     g = Glifo(u, "O", 0x4F, lsb=round(p["lat_n"] * 0.8), rsb=round(p["lat_n"] * 0.8))
-    g.ovalo(w / 2, c / 2, w / 2, c / 2 + REB, 0.58, 0.58)
-    g.ovalo(w / 2, c / 2, w / 2 - s * 1.1, c / 2 + REB - f, 0.56, 0.56, horario=True)
+    g.ovalo(w / 2, c / 2, w / 2, c / 2 + REB, p["k_ext"], p["k_ext"])
+    g.ovalo(w / 2, c / 2, w / 2 - s * 1.1, c / 2 + REB - f, p["k_int"], p["k_int"], horario=True)
     g.cerrar(w)
 
 

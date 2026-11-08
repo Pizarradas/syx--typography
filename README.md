@@ -141,7 +141,7 @@ Details and their limits live in [`references/04-programas-y-toolchain.md`](refe
 ## 🧰 What's inside
 
 <details>
-<summary><strong>Tools</strong> (<code>scripts/</code>) — 15</summary>
+<summary><strong>Tools</strong> (<code>scripts/</code>) — 16</summary>
 
 <br>
 
@@ -153,8 +153,9 @@ Details and their limits live in [`references/04-programas-y-toolchain.md`](refe
 | `trazos.py`, `motor.py` | Drawing by code: per-project tension and cut angle, inclined contrast axis, superellipse, caps, teardrop and slab; masters compatible by construction |
 | `check_sources.py` | Compatibility, contours, nodes at extremes, kinks, inflections, anchors and style links |
 | `verificar.py` | Mathematical audit with explicit tolerances: topology, exact zones, kinks, handles, G2 and the brief's rules (`verificar.json`); `--meta` tests itself |
-| `reglas.py` | Construction rules: translation-contrast thickness, nodes placed with the real stroke width, advance from the ink, handles realigned on the grid |
-| `build.py` | Compiles and verifies with OTS, consistency, shaping and QA |
+| `reglas.py` | Construction rules: translation-contrast thickness, nodes placed with the real stroke width, advance from the ink, handles realigned on the grid, G2 harmonization |
+| `cincel.py` | Chisel terminals with one rule for straight and curved strokes: exact trim and angle solved against the real edges |
+| `build.py` | Compiles and verifies with OTS, consistency, shaping and QA; usWin never below the line metrics, so an unfinished font does not clip fallback text on Windows |
 | `proof.py` | PNG proofs: control strings, words, text, waterfall, glyph grid, weights, languages, dark |
 | `shape_tests.py` | HarfBuzz shaping tests, also against a WOFF2 |
 | `coverage.py` | Per-language coverage of letters, marks and punctuation |

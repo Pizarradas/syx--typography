@@ -131,8 +131,10 @@ Errores que conviene evitar desde el generador [inferencia, a partir de esa audi
 |---|---|---|
 | Rebasamiento doble | El eje de una curva horizontal se coloca con el fino nominal, pero con eje inclinado el trazo horizontal es más grueso | `reglas.eje_en_zona(zona, grosor_real)` |
 | Laterales desplazados | El avance se calcula desde la caja del dibujo y la tinta no empieza en x = 0 | `reglas.cerrar_desde_tinta` |
-| Regla de terminal incoherente | Astas cortadas respecto al trazo y curvas respecto a la vertical | Una sola definición: ángulo respecto a la perpendicular al trazo, con el eje como bisectriz de los dos bordes reales; mídela con `verificar.json` → `cincel` |
-| Restos de corte | Un corte booleano demasiado corto deja astillas; uno demasiado largo muerde otra parte de la letra | Corta el trazo aislado y con la raíz exacta de la cúbica (`trazo(..., ini=, fin=)` de `motor.py`) |
+| Regla de terminal incoherente | Astas cortadas respecto al trazo y curvas respecto a la vertical | Una sola definición: ángulo respecto a la perpendicular al trazo, con el eje como bisectriz de los dos bordes reales (`cincel.trazo_con_cincel`); mídela con `verificar.json` → `cincel` |
+| Restos de corte | Un corte booleano demasiado corto deja astillas; uno demasiado largo muerde otra parte de la letra | Recorta con la raíz exacta de la cúbica, no con booleanas (`cincel.py` lo hace con `trazo(..., ini=, fin=)` de `motor.py`); si el corte no cruza el tramo, alarga el esqueleto más allá del corte |
+| Saltos de curvatura | Nodos que unen arcos de radio muy distinto | `reglas.armonizar_g2`: κ = (2/3)·δ/h² a ambos lados, con tope de tensión 0,80 y retroceso |
+| Recorte en Windows durante el desarrollo | usWin calculado con una fuente incompleta (sin descendentes) | `build.py` ya no baja usWin de las métricas de línea |
 | Espolones en uniones | La panza entra en el asta a la altura de un vértice del asta | Que el remate de la panza quede dentro del asta; `verificar.py` marca rectas < 15 u entre dos esquinas |
 | Quiebros por redondeo | Tiradores cortos redondeados a enteros | `reglas.alinear_tiradores` |
 

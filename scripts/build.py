@@ -8,7 +8,8 @@
   build.py PROYECTO --solo-qa    pasa el QA sobre lo ya compilado, sin recompilar
 
 Antes de compilar: copia sources/features.fea a cada máster y recalcula usWinAscent y
-usWinDescent con la caja real de la familia, para que ningún máster difiera.
+usWinDescent con la caja real de la familia (nunca por debajo de typo), para que ningún
+máster difiera ni Windows recorte texto mientras la fuente esté incompleta.
 Código de salida distinto de 0 si falla una puerta.
 """
 import argparse, json, os, shutil, subprocess, sys, tempfile
@@ -42,7 +43,13 @@ def preparar(proj, ds, ufos):
             if pen.bounds:
                 ymin, ymax = min(ymin, pen.bounds[1]), max(ymax, pen.bounds[3])
     ymin, ymax = extremos_con_marcas(ufos, ymin, ymax)
-    win_a, win_d = round(ymax), round(abs(ymin))
+    # usWin cubre la caja real de la familia, pero nunca menos que las métricas de línea
+    # (typo): con una fuente aún incompleta (sin descendentes ni acentos) la caja real es
+    # pequeña y Windows recorta las letras de RESPALDO que pone otra fuente en pantalla.
+    i0 = ufos[0].info
+    typo_a = i0.openTypeOS2TypoAscender or 0
+    typo_d = abs(i0.openTypeOS2TypoDescender or 0)
+    win_a, win_d = max(round(ymax), typo_a), max(round(abs(ymin)), typo_d)
     antes = (ufos[0].info.openTypeOS2WinAscent, ufos[0].info.openTypeOS2WinDescent)
     if antes != (win_a, win_d):
         print(f"AVISO: usWin cambia de {antes} a {(win_a, win_d)}: afecta al interlineado en programas sin USE_TYPO_METRICS")

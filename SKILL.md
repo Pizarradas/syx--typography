@@ -158,6 +158,8 @@ Elige el origen con rigor: una petición abstracta no es una regla humana, y apr
 - Coloca cada nodo con el grosor **real** del trazo en ese punto, no con el nominal: con contraste de eje inclinado, un trazo horizontal no mide el fino (`reglas.grosor_traslacion`, `reglas.eje_en_zona`). Si no, los rebasamientos salen del doble sin que se note en la prueba.
 - Fija el avance desde la tinta real (`reglas.cerrar_desde_tinta`), no desde la caja del dibujo: curvas, cortes y uniones rara vez empiezan en x = 0.
 - Tras redondear a enteros, recupera la continuidad de los nodos lisos (`reglas.alinear_tiradores`): con tiradores cortos, el redondeo crea quiebros de 2–3°.
+- Terminales a cincel con una sola regla para rectas y curvas: `cincel.trazo_con_cincel(g, nodos, angulo, ini=t, fin=t)` corta con el recorte exacto del motor y fija el ángulo respecto a la bisectriz de los bordes reales. Comprueba la regla con `verificar.json` → `cincel`.
+- Para curvas G2 en el contorno final, `reglas.armonizar_g2` antes de redondear y `reglas.alinear_tiradores` después; tiene tope de tensión y retrocede si crearía una inflexión o un extremo.
 - Evita la geometría pura. Compensa curvas frente a rectas, horizontales frente a verticales, uniones y mayúsculas frente a minúsculas. Un círculo perfecto se ve mal.
 - Reutiliza partes (hombro, panza, remate), pero corrige ópticamente cada glifo. El sistema da coherencia; la excepción da vida.
 - Protege lo que la persona retoque: lista de glifos congelados que el generador no sobrescribe.
@@ -173,7 +175,8 @@ Elige el origen con rigor: una petición abstracta no es una regla humana, y apr
 | `scripts/motor.py` | Motor de trazos: esqueleto a contorno, cortes y tapas de terminal, anillos (también de eje inclinado), gota y losa |
 | `scripts/check_sources.py` | Compatibilidad, contornos abiertos, nodos en extremos, tensiones |
 | `scripts/verificar.py` | Auditoría matemática con tolerancias: topología, zonas exactas, quiebros, tiradores, G2 y reglas del brief (`verificar.json`); `--meta` se prueba a sí mismo |
-| `scripts/reglas.py` | Reglas de construcción: grosor de traslación, eje en zona con grosor real, avance desde la tinta, tiradores alineados en la rejilla |
+| `scripts/reglas.py` | Reglas de construcción: grosor de traslación, eje en zona con grosor real, avance desde la tinta, tiradores alineados en la rejilla, armonización G2 |
+| `scripts/cincel.py` | Terminales a cincel con regla única (ángulo respecto a la perpendicular al trazo), recorte exacto y ángulo por punto fijo |
 | `scripts/build.py` | Compila y ejecuta OTS, coherencia, conformación, fontc y QA |
 | `scripts/proof.py` | Pruebas PNG: control, palabras, texto, cascada, glifos, pesos, idiomas, oscuro |
 | `scripts/shape_tests.py` | Pruebas de conformación con HarfBuzz; `--comparar` frente a un WOFF2 |

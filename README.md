@@ -178,6 +178,10 @@ Details and their limits live in [`references/04-programas-y-toolchain.md`](refe
 
 Templates and examples live in `assets/`.
 
+## 🔐 Made with this skill
+
+**[Ganzúa Lacre](https://pizarradas.github.io/ganzua-lacre/)**: a broad-nib, chisel-cut typeface for an escape-room company, drawn by an agent from brief to WOFF2 with this skill. The page lets you try it and download it, and walks through the whole process: the three sketched directions, the pen written as an equation, the math audit, the decision grid and the provenance record. Source: [Pizarradas/ganzua-lacre](https://github.com/Pizarradas/ganzua-lacre).
+
 ## 🔍 What to expect
 
 - **Reliable where verifiable:** master compatibility, metrics, naming, features, coverage and builds.

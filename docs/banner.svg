@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 230" width="900" height="230" role="img" aria-label="diseño-tipografías">
+  <!-- El símbolo es salida real del motor: G.anillo_eje(0,200,0,220, grueso=62, fino=24, eje=18) -->
+  <style>
+    .tinta { fill: #171513; }
+    .sub   { fill: #8c8678; }
+    @media (prefers-color-scheme: dark) {
+      .tinta { fill: #f2ede3; }
+      .sub   { fill: #a69f90; }
+    }
+    text { font-family: Georgia, "Times New Roman", "Noto Serif", serif; }
+  </style>
+  <g transform="translate(40, 203) scale(0.78, -0.78)">
+    <path fill="#a31621" d="M100,0 C157,0 200,47 200,110 C200,173 157,220 100,220 C43,220 0,173 0,110 C0,47 43,0 100,0 Z M121,28 C88,28 55,89 55,147 C55,176 63,192 79,192 C112,192 145,131 145,73 C145,44 137,28 121,28 Z"/>
+  </g>
+  <text class="tinta" x="235" y="130" font-size="68">diseño-tipografías</text>
+  <text class="sub" x="239" y="174" font-size="17" letter-spacing="4">DEL BRIEF AL WOFF2 · SKILL PARA CLAUDE CODE</text>
+</svg>
